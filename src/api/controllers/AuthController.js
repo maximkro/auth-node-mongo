@@ -36,6 +36,7 @@ class AuthController {
                 res.status(400).json({ message: `user '${username} not found...` });
             }
 
+<<<<<<< HEAD
             const match = await Bcrypt.compare(password, user.password);
             if (!match) {
                 return res.status(400).json({ message: `incorrect password...` });
@@ -44,6 +45,8 @@ class AuthController {
             const token = generateAcessToken(user._id, user.roles);
             return res.json({ token });
 
+=======
+>>>>>>> bb76746 (validation on Registration added)
         } catch (e) {
             console.log(e);
             res.status(400).json({ message: 'Login Error...' });
@@ -52,8 +55,16 @@ class AuthController {
 
     async getUsers(req, res) {
         try {
+<<<<<<< HEAD
             const users = await User.find();
             res.json(users);
+=======
+            const userRole = new Role();
+            const adminRole = new Role({ value: 'ADMIN' });
+            await userRole.save();
+            await adminRole.save();
+            res.json('server works');
+>>>>>>> bb76746 (validation on Registration added)
         } catch (e) {
             console.log(e);
             res.status(400).json({ message: 'Error' });
