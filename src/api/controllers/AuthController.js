@@ -30,6 +30,16 @@ class AuthController {
 
     async login(req, res) {
         try {
+            const { username, password } = req.body;
+            const user = await User.findOne({ username });
+            if (!user) {
+                res.status(400).json({ message: `user '${username} not found...` });
+            }
+
+            const match = await Bcrypt.compare(password, user.password);
+            if (!match) {
+                return res.status(400).json({ message: `incorrect password...` });
+            }
 
         } catch (e) {
             console.log(e);
