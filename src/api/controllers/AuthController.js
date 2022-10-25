@@ -2,7 +2,7 @@ import Role from '../models/Role.js';
 import User from '../models/User.js';
 import Bcrypt from 'bcryptjs';
 import { validationResult } from 'express-validator';
-
+import { generateAcessToken } from '../tokens/user.token.js';
 class AuthController {
     async registration(req, res) {
         try {
@@ -41,6 +41,9 @@ class AuthController {
                 return res.status(400).json({ message: `incorrect password...` });
             }
 
+            const token = generateAcessToken(user._id, user.roles);
+            return res.json({ token });
+
         } catch (e) {
             console.log(e);
             res.status(400).json({ message: 'Login Error...' });
@@ -49,11 +52,8 @@ class AuthController {
 
     async getUsers(req, res) {
         try {
-            const userRole = new Role();
-            const adminRole = new Role({ value: 'ADMIN' });
-            await userRole.save();
-            await adminRole.save();
-            res.json('server works');
+            const users = await User.find();
+            res.json(users);
         } catch (e) {
             console.log(e);
             res.status(400).json({ message: 'Error' });
